@@ -20,7 +20,8 @@ class FakeTaskRepository : TaskRepository {
     override suspend fun addTask(task: Task) { tasks.add(task) }
 
     override suspend fun updateTask(task: Task) {
-        val index = tasks.indexOf(task)
+        val storedTask = tasks.first { it.id == task.id }
+        val index = tasks.indexOf(storedTask)
         tasks[index] = task
     }
 

@@ -9,7 +9,9 @@ import com.soundapp.mobile.todotask.R
 import com.soundapp.mobile.todotask.domain.model.Task
 import kotlinx.android.synthetic.main.item_task.view.*
 
-class TaskAdapter: ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffUtil()) {
+class TaskAdapter(
+    private val onFinished: (task: Task) -> Unit
+): ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.item_task, parent, false)
@@ -24,6 +26,7 @@ class TaskAdapter: ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffUtil())
         fun update(task: Task) {
             with(itemView) {
                 taskFinishedCheck.isChecked = task.isFinished
+                taskFinishedCheck.setOnClickListener { onFinished(task) }// same than onFinished.invoke(task)
                 cardContentText.text = task.content
             }
         }

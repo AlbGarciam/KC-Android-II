@@ -39,4 +39,12 @@ class TasksViewModel(
         isLoadingState.value = isLoading
     }
 
+    fun toggleFinished(task: Task) {
+        val newTask = task.copy(isFinished = !task.isFinished)
+        launch(Dispatchers.IO) {
+            repository.updateTask(newTask)
+            loadTasks()
+        }
+    }
+
 }
