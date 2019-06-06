@@ -38,7 +38,6 @@ class TasksViewModel(
         val newTask = task.copy(isFinished = !task.isFinished)
         launch(Dispatchers.IO) {
             repository.updateTask(newTask)
-            loadTasks()
         }
     }
 
