@@ -15,12 +15,7 @@ class TasksViewModel(
     val tasksState = MutableLiveData<List<Task>>()
     val isLoadingState = MutableLiveData<Boolean>()
 
-    init {
-        // As soon as this view model is loaded it will retrieve the tasks
-        loadTasks()
-    }
-
-    private fun loadTasks() {
+    fun loadTasks() {
         // Launch will take the scope that we declared on #BaseViewModel if we not pass anything
         launch {
             // Main thread

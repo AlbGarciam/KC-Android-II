@@ -34,6 +34,11 @@ class TasksFragment: Fragment() {
         bindState()
     }
 
+    override fun onResume() {
+        super.onResume()
+        tasksViewModel.loadTasks()
+    }
+
     private fun setUpRecycler() {
         with(tasksRecyclerView) {
             layoutManager = LinearLayoutManager(requireActivity(),RecyclerView.VERTICAL, false)
