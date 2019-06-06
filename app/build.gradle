@@ -48,6 +48,9 @@ dependencies {
     implementation 'org.koin:koin-android:2.0.1'
     implementation 'org.koin:koin-android-viewmodel:2.0.1'
 
+    // Floating action button
+    implementation 'com.github.clans:fab:1.6.4'
+
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:2.+"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"

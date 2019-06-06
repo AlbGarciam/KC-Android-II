@@ -7,6 +7,7 @@ import com.soundapp.mobile.todotask.data.repository.local.TaskDatabase
 import com.soundapp.mobile.todotask.data.repository.mapper.TaskEntityMapper
 import com.soundapp.mobile.todotask.data.repository.mapper.TaskMapper
 import com.soundapp.mobile.todotask.domain.TaskRepository
+import com.soundapp.mobile.todotask.presentations.add_task.AddTaskViewModel
 import com.soundapp.mobile.todotask.presentations.tasks.TasksViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
@@ -27,7 +28,7 @@ val appModule = module{
     }
 
 
-    single<TaskRepository>(qualifier = named("real")) {
+    single<TaskRepository>() {
         TaskRepositoryImpl(get(), get(), get()) // this will call the factory
     }
 
@@ -44,6 +45,10 @@ val appModule = module{
     }
 
     viewModel {
-        TasksViewModel(get(qualifier = named("fake")))
+        TasksViewModel(get())
+    }
+
+    viewModel {
+        AddTaskViewModel(get())
     }
 }

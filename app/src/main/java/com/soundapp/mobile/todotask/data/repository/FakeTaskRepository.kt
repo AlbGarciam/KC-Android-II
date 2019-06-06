@@ -10,7 +10,8 @@ class FakeTaskRepository : TaskRepository {
         mutableListOf(
             Task(1, "🥳", Instant.now(), false, false),
             Task(2, "Texto un poco mas largo a ver como se comporta🥳", Instant.now(), false, true),
-            Task(3, "Texto un poco mas largo a ver como se comporta📦🥳", Instant.now(), false, true)
+            Task(3, "Texto un poco mas largo a ver como se comporta📦🥳", Instant.now(), false, true),
+            Task(4, "Texto un poco mas largo a ver como se comporta📦🥳", Instant.now(), false, true)
         )
     }
     override suspend fun getAll(): List<Task> = runBlocking { tasks }
