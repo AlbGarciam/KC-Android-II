@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.soundapp.mobile.todotask.R
 import com.soundapp.mobile.todotask.domain.model.Task
+import com.soundapp.mobile.utils.extensions.setVisible
 import com.soundapp.mobile.utils.extensions.timeAgo
 import kotlinx.android.synthetic.main.item_task.view.*
 
@@ -39,6 +40,7 @@ class TaskAdapter(
                 }
                 dateTextView.text = task.createdAt.timeAgo()
                 taskFinishedCheck.isChecked = task.isFinished
+                warningIcon.setVisible(task.isHighPriority)
                 taskFinishedCheck.setOnClickListener {
                     onFinished(task)
                     if (taskFinishedCheck.isChecked ) {
