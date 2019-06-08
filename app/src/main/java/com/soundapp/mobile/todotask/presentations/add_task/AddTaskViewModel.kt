@@ -17,11 +17,11 @@ class AddTaskViewModel(
     val closeAction = MutableLiveData<Event<Unit>>()
 
 
-    fun save(content: String) {
+    fun save(content: String, isHighlighted: Boolean) {
         if (!validateContent(content)) { return }
         launch {
             withContext(Dispatchers.IO) { taskRepository.addTask(Task(0,
-                content, Instant.now(), isHighPriority = false, isFinished = false))
+                content, Instant.now(), isHighPriority = isHighlighted, isFinished = false))
             }
             closeAction.call() // Extension
         }
