@@ -19,9 +19,7 @@ class TasksFragment: Fragment() {
 
     private val tasksViewModel: TasksViewModel by viewModel()
     private val adapter : TaskAdapter by lazy {
-        TaskAdapter{
-            tasksViewModel.toggleFinished(it)
-        }
+        TaskAdapter(onFinished = onToggleClicked, onClickListener = onTaskClicked)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -48,18 +46,14 @@ class TasksFragment: Fragment() {
     }
 
     private fun bindState() {
-
         with(tasksViewModel) {
-            observe(isLoadingState) { onLoadingState(it) }
-            observe(tasksState) { onTasksLoaded(it) }
+            observe(isLoadingState, onLoadingState)
+            observe(tasksState, onTasksLoaded)
         }
     }
 
-    private fun onLoadingState( isLoading: Boolean ) {
-        tasksLoader.setVisible(isLoading)
-    }
-
-    private fun onTasksLoaded(tasks: List<Task>) {
-        adapter.submitList(tasks)
-    }
+    private val onLoadingState: (Boolean) -> Unit = { tasksLoader.setVisible(it) }
+    private val onTasksLoaded: (List<Task>) -> Unit = { adapter.submitList(it) }
+    private val onToggleClicked: (Task) -> Unit = { tasksViewModel.toggleFinished(it) }
+    private val onTaskClicked: (Task) -> Unit = { (context as? TasksFragmentListener)?.onTaskClicked(it) }
 }

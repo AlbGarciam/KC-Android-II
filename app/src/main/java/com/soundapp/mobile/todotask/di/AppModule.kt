@@ -8,6 +8,7 @@ import com.soundapp.mobile.todotask.data.repository.mapper.TaskEntityMapper
 import com.soundapp.mobile.todotask.data.repository.mapper.TaskMapper
 import com.soundapp.mobile.todotask.domain.TaskRepository
 import com.soundapp.mobile.todotask.presentations.add_task.AddTaskViewModel
+import com.soundapp.mobile.todotask.presentations.task_details.DetailTaskViewModel
 import com.soundapp.mobile.todotask.presentations.tasks.TasksViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
@@ -50,5 +51,9 @@ val appModule = module{
 
     viewModel {
         AddTaskViewModel(get())
+    }
+
+    viewModel {
+        DetailTaskViewModel(get())
     }
 }

@@ -18,7 +18,8 @@ import com.soundapp.mobile.utils.extensions.timeAgo
 import kotlinx.android.synthetic.main.item_task.view.*
 
 class TaskAdapter(
-    private val onFinished: (task: Task) -> Unit
+    private val onFinished: (task: Task) -> Unit,
+    private val onClickListener: (task: Task) -> Unit
 ): ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -50,6 +51,7 @@ class TaskAdapter(
                     }
                 }// same than onFinished.invoke(task)
             }
+            itemView.setOnClickListener { onClickListener(task) }
         }
 
         private fun applyStrikeThrough(view: TextView, content: String, animated: Boolean = false) {
