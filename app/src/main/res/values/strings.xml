@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Todo Task</string>
     <string name="add_task_title">Adding task</string>
+    <string name="highlight_task">Priority</string>
+    <string name="save_button_text">Save</string>
+    <string name="hint_add_task_input">Content of your task</string>
+    <string name="priority_content_description">Is priority</string>
+    <string name="detail_task_title">Task detail</string>
+    <string name="finished_task">Finished</string>
 </resources>

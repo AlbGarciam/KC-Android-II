@@ -6,6 +6,7 @@ import com.soundapp.mobile.todotask.domain.model.Task
 import com.soundapp.mobile.todotask.presentations.BaseViewModel
 import com.soundapp.mobile.utils.Event
 import com.soundapp.mobile.utils.extensions.call
+import com.soundapp.mobile.utils.extensions.isValidAsContent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -16,17 +17,13 @@ class AddTaskViewModel(
 ): BaseViewModel() {
     val closeAction = MutableLiveData<Event<Unit>>()
 
-
-    fun save(content: String) {
-        if (!validateContent(content)) { return }
+    fun save(content: String, isHighlighted: Boolean) {
+        if (!content.isValidAsContent()) { return }
         launch {
             withContext(Dispatchers.IO) { taskRepository.addTask(Task(0,
-                content, Instant.now(), isHighPriority = false, isFinished = false))
+                content, Instant.now(), isHighPriority = isHighlighted, isFinished = false))
             }
             closeAction.call() // Extension
         }
-
     }
-
-    private fun validateContent(content: String) : Boolean = content.isNotEmpty()
 }

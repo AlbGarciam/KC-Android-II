@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:id="@+id/detailInfoContainer"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_add_task_input"
+                android:id="@+id/taskContent"
+                style="@style/InputText"/>
+        <TextView
+                tools:text="3 minutes ago"
+                android:drawableStart="@drawable/ic_access_time_24dp"
+                android:drawablePadding="8dp"
+                style="@style/TaskCard.Content.Date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/dateTextView"
+                android:textSize="16sp"
+                android:layout_marginTop="24dp"/>
+        <CheckBox
+                android:text="@string/highlight_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/highlightBox"
+                android:layout_marginTop="8dp"/>
+        <CheckBox
+                android:text="@string/finished_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/isFinishedBox"
+                android:layout_marginTop="8dp"/>
+    </LinearLayout>
+    <ProgressBar
+            android:id="@+id/taskLoader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+    <Button
+            android:text="@string/save_button_text"
+            android:layout_width="match_parent"
+            style="@style/MainCTA"
+            android:layout_height="wrap_content"
+            android:id="@+id/saveButton"
+            android:layout_gravity="bottom|center_horizontal"/>
+</FrameLayout>

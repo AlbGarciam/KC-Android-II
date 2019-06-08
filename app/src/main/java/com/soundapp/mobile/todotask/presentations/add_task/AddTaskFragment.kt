@@ -28,7 +28,8 @@ class AddTaskFragment: Fragment() {
     private fun bindActions() {
         saveButton.setOnClickListener {
             val taskContent = taskContent.text
-            addTaskViewModel.save(taskContent.toString())
+            val checkboxValue = checkBox.isChecked
+            addTaskViewModel.save(taskContent.toString(), checkboxValue)
         }
     }
 
