@@ -14,6 +14,7 @@ class TasksViewModel(
 
     val tasksState = MutableLiveData<List<Task>>()
     val isLoadingState = MutableLiveData<Boolean>()
+    val isEmptyState = MutableLiveData<Boolean>()
 
     fun loadTasks() {
         // Launch will take the scope that we declared on #BaseViewModel if we not pass anything
@@ -27,6 +28,7 @@ class TasksViewModel(
             // Main thread
             tasksState.value = result
             showLoading(false)
+            isEmptyState.value = result.isEmpty()
         }
     }
 
@@ -38,6 +40,27 @@ class TasksViewModel(
         val newTask = task.copy(isFinished = !task.isFinished)
         launch(Dispatchers.IO) {
             repository.updateTask(newTask)
+            loadTasks() // Keep synchronized view with viewmodel
+        }
+    }
+
+    fun updateTaskContent(task: Task, newContent: String) {
+        val newTask = task.copy(content = newContent)
+        launch(Dispatchers.IO) {
+            repository.updateTask(newTask)
+            loadTasks() // Keep synchronized view with viewmodel
+        }
+    }
+
+    fun deleteTaskAt(position: Int) {
+        if (position < 0 || position >= (tasksState.value?.size ?: 0)) return
+        tasksState.value?.get(position)?.let {task ->
+            launch {
+                withContext(Dispatchers.IO) {
+                    repository.removeTask(task)
+                }
+                loadTasks() // Keep synchronized view with viewmodel
+            }
         }
     }
 

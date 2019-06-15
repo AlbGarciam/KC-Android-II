@@ -27,20 +27,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/dateTextView"
-                android:textSize="16sp"
-                android:layout_marginTop="24dp"/>
-        <CheckBox
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"/>
+        <Switch
                 android:text="@string/highlight_task"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/highlightBox"
-                android:layout_marginTop="8dp"/>
-        <CheckBox
+                android:layout_marginTop="8dp"
+                style="@style/CustomSwitch"/>
+        <Switch
                 android:text="@string/finished_task"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/isFinishedBox"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp"
+                style="@style/CustomSwitch"/>
     </LinearLayout>
     <ProgressBar
             android:id="@+id/taskLoader"

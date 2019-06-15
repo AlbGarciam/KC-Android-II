@@ -7,4 +7,6 @@
     <string name="priority_content_description">Is priority</string>
     <string name="detail_task_title">Task detail</string>
     <string name="finished_task">Finished</string>
+    <string name="empty_status">No tasks found, click on \"+\" to add a new one</string>
+    <string name="menu_delete">Delete</string>
 </resources>
