@@ -11,9 +11,13 @@
             android:layout_height="wrap_content"
             style="@style/InputText"
             android:hint="@string/hint_add_task_input"
-            android:id="@+id/taskContent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp" android:layout_marginTop="16dp"/>
+            android:id="@+id/taskContent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"/>
     <Button
             android:text="@string/save_button_text"
             android:layout_width="0dp"
@@ -22,11 +26,13 @@
             android:id="@+id/saveButton" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
-    <CheckBox
+    <Switch
             android:text="@string/highlight_task"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkBox" app:layout_constraintStart_toStartOf="@+id/taskContent"
+            style="@style/CustomSwitch"
+            android:id="@+id/checkBox"
+            app:layout_constraintStart_toStartOf="@+id/taskContent"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/taskContent" app:layout_constraintEnd_toEndOf="@+id/taskContent"/>
+            app:layout_constraintTop_toBottomOf="@+id/taskContent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
