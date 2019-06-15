@@ -40,6 +40,15 @@ class TasksViewModel(
         val newTask = task.copy(isFinished = !task.isFinished)
         launch(Dispatchers.IO) {
             repository.updateTask(newTask)
+            loadTasks() // Keep synchronized view with viewmodel
+        }
+    }
+
+    fun updateTaskContent(task: Task, newContent: String) {
+        val newTask = task.copy(content = newContent)
+        launch(Dispatchers.IO) {
+            repository.updateTask(newTask)
+            loadTasks() // Keep synchronized view with viewmodel
         }
     }
 
@@ -50,7 +59,7 @@ class TasksViewModel(
                 withContext(Dispatchers.IO) {
                     repository.removeTask(task)
                 }
-                loadTasks()
+                loadTasks() // Keep synchronized view with viewmodel
             }
         }
     }

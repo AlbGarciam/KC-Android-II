@@ -21,7 +21,9 @@ class TasksFragment: Fragment() {
 
     private val tasksViewModel: TasksViewModel by viewModel()
     private val adapter : TaskAdapter by lazy {
-        TaskAdapter(onFinishedStatusChanged = onToggleClicked, onClickListener = onTaskClicked)
+        TaskAdapter(onFinishedStatusChanged = onToggleClicked,
+                    onClickListener = onTaskClicked,
+                    onTaskUpdatedRequested = onTaskContentUpdate)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -74,6 +76,7 @@ class TasksFragment: Fragment() {
     private val onTasksLoaded: (List<Task>) -> Unit = { adapter.submitList(it) }
     private val onToggleClicked: (Task) -> Unit = { tasksViewModel.toggleFinished(it) }
     private val onTaskClicked: (Task) -> Unit = { (context as? TasksFragmentListener)?.onTaskClicked(it) }
+    private val onTaskContentUpdate: (Task, String) -> Unit = { task, newContent -> tasksViewModel.updateTaskContent(task, newContent)}
     private val onEmptyStateChanged: (Boolean) -> Unit = { isEmpty ->
         if (tasksViewModel.isLoadingState.value == false) {
             emptyText.setVisible(isEmpty)

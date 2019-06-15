@@ -21,7 +21,8 @@ import kotlinx.android.synthetic.main.item_task.view.*
 
 class TaskAdapter(
     private val onFinishedStatusChanged: (task: Task) -> Unit,
-    private val onClickListener: (task: Task) -> Unit
+    private val onClickListener: (task: Task) -> Unit,
+    private val onTaskUpdatedRequested: (task: Task, text: String) -> Unit
 ): ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -54,10 +55,30 @@ class TaskAdapter(
                         removeStrikeThrough(cardContentText, task.content, true)
                     }
                 }
+
+                setOnTouchListener { _, _ ->
+                    // This is used to remove the focus from edit text
+                    if (cardContentText.isEnabled) {
+                        cardContentText.isEnabled = false
+                        onTaskUpdatedRequested(task, cardContentText.text.toString())
+                        val isChecked = itemView.finishSwitch.isChecked
+                        if (isChecked) {
+                            applyStrikeThrough(cardContentText, cardContentText.text.toString(), true)
+                        } else {
+                            removeStrikeThrough(cardContentText, cardContentText.text.toString(), true)
+                        }
+                    }
+                    requestFocus()
+                    false
+                }
+
+                edit.setOnClickListener {// This one is used to set focus on edit text
+                    cardContentText.isEnabled = true
+                    cardContentText.requestFocus()
+                }
             }
             itemView.setOnClickListener { onClickListener(task) }
         }
-
         private fun applyStrikeThrough(view: TextView, content: String, animated: Boolean = false) {
             val span = SpannableString(content)
             val spanStrike = StrikethroughSpan()
