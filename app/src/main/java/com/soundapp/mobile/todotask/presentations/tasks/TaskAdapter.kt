@@ -13,12 +13,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.soundapp.mobile.todotask.R
 import com.soundapp.mobile.todotask.domain.model.Task
+import com.soundapp.mobile.utils.extensions.indicator
+import com.soundapp.mobile.utils.extensions.indicatorForFinishStatus
 import com.soundapp.mobile.utils.extensions.setVisible
 import com.soundapp.mobile.utils.extensions.timeAgo
 import kotlinx.android.synthetic.main.item_task.view.*
 
 class TaskAdapter(
-    private val onFinished: (task: Task) -> Unit,
+    private val onFinishedStatusChanged: (task: Task) -> Unit,
     private val onClickListener: (task: Task) -> Unit
 ): ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -40,16 +42,17 @@ class TaskAdapter(
                     removeStrikeThrough(cardContentText, task.content)
                 }
                 dateTextView.text = task.createdAt.timeAgo()
-                taskFinishedCheck.isChecked = task.isFinished
-                warningIcon.setVisible(task.isHighPriority)
-                taskFinishedCheck.setOnClickListener {
-                    onFinished(task)
-                    if (taskFinishedCheck.isChecked ) {
+                finishSwitch.isChecked = task.isFinished
+                statusIndicator.setImageResource(task.indicator())
+                finishSwitch.setOnCheckedChangeListener { _ , isChecked ->
+                    onFinishedStatusChanged(task)
+                    statusIndicator.setImageResource(task.indicatorForFinishStatus(isChecked))
+                    if (isChecked) {
                         applyStrikeThrough(cardContentText, task.content, true)
                     } else {
                         removeStrikeThrough(cardContentText, task.content, true)
                     }
-                }// same than onFinished.invoke(task)
+                }
             }
             itemView.setOnClickListener { onClickListener(task) }
         }

@@ -9,4 +9,16 @@ data class Task (
     val createdAt: Instant,
     val isHighPriority: Boolean,
     val isFinished: Boolean
-)
+) {
+    enum class Status {
+        FINISHED, HIGH_PRIORITY, LOW_PRIORITY
+    }
+
+    var status: Status = Status.LOW_PRIORITY
+        get() {
+            return when(isFinished) {
+                true -> Status.FINISHED
+                false -> if (isHighPriority) Status.HIGH_PRIORITY else Status.LOW_PRIORITY
+            }
+        }
+}

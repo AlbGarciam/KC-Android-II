@@ -19,7 +19,7 @@ class TasksFragment: Fragment() {
 
     private val tasksViewModel: TasksViewModel by viewModel()
     private val adapter : TaskAdapter by lazy {
-        TaskAdapter(onFinished = onToggleClicked, onClickListener = onTaskClicked)
+        TaskAdapter(onFinishedStatusChanged = onToggleClicked, onClickListener = onTaskClicked)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
