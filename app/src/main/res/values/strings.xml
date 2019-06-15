@@ -9,4 +9,6 @@
     <string name="finished_task">Finished</string>
     <string name="empty_status">No tasks found, click on \"+\" to add a new one</string>
     <string name="menu_delete">Delete</string>
+    <string name="subtasks_title">Subtasks</string>
+    <string name="subtask_add">Add</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.soundapp.mobile.todotask.data.repository.local
+package com.soundapp.mobile.todotask.data.repository.local.task
 
 import androidx.room.*
 

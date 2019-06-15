@@ -72,7 +72,6 @@ class TasksFragment: Fragment() {
         }
     }
 
-
     private val onTasksLoaded: (List<Task>) -> Unit = { adapter.submitList(it) }
     private val onToggleClicked: (Task) -> Unit = { tasksViewModel.toggleFinished(it) }
     private val onTaskClicked: (Task) -> Unit = { (context as? TasksFragmentListener)?.onTaskClicked(it) }
