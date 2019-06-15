@@ -66,11 +66,27 @@ class TasksFragment: Fragment() {
         with(tasksViewModel) {
             observe(isLoadingState, onLoadingState)
             observe(tasksState, onTasksLoaded)
+            observe(isEmptyState, onEmptyStateChanged)
         }
     }
 
-    private val onLoadingState: (Boolean) -> Unit = { tasksLoader.setVisible(it) }
+
     private val onTasksLoaded: (List<Task>) -> Unit = { adapter.submitList(it) }
     private val onToggleClicked: (Task) -> Unit = { tasksViewModel.toggleFinished(it) }
     private val onTaskClicked: (Task) -> Unit = { (context as? TasksFragmentListener)?.onTaskClicked(it) }
+    private val onEmptyStateChanged: (Boolean) -> Unit = { isEmpty ->
+        if (tasksViewModel.isLoadingState.value == false) {
+            emptyText.setVisible(isEmpty)
+            tasksRecyclerView.setVisible(!isEmpty)
+        }
+    }
+    private val onLoadingState: (Boolean) -> Unit = { isLoading ->
+        tasksLoader.setVisible(isLoading)
+        if (!isLoading) {
+            tasksViewModel.isEmptyState.value?.let { isEmpty ->
+                emptyText.setVisible(isEmpty)
+                tasksRecyclerView.setVisible(!isEmpty)
+            }
+        }
+    }
 }

@@ -14,6 +14,7 @@ class TasksViewModel(
 
     val tasksState = MutableLiveData<List<Task>>()
     val isLoadingState = MutableLiveData<Boolean>()
+    val isEmptyState = MutableLiveData<Boolean>()
 
     fun loadTasks() {
         // Launch will take the scope that we declared on #BaseViewModel if we not pass anything
@@ -27,6 +28,7 @@ class TasksViewModel(
             // Main thread
             tasksState.value = result
             showLoading(false)
+            isEmptyState.value = result.isEmpty()
         }
     }
 

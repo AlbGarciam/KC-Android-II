@@ -44,8 +44,9 @@ class TaskAdapter(
                 dateTextView.text = task.createdAt.timeAgo()
                 finishSwitch.isChecked = task.isFinished
                 statusIndicator.setImageResource(task.indicator())
-                finishSwitch.setOnCheckedChangeListener { _ , isChecked ->
+                finishSwitch.setOnClickListener {
                     onFinishedStatusChanged(task)
+                    val isChecked = finishSwitch.isChecked
                     statusIndicator.setImageResource(task.indicatorForFinishStatus(isChecked))
                     if (isChecked) {
                         applyStrikeThrough(cardContentText, task.content, true)
