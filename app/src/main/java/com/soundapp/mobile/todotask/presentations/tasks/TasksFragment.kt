@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.soundapp.mobile.todotask.R
 import com.soundapp.mobile.todotask.domain.model.Task
 import com.soundapp.mobile.utils.extensions.EqualSpacingItemDecoration
+import com.soundapp.mobile.utils.extensions.SwipeToDeleteCallback
 import com.soundapp.mobile.utils.extensions.observe
 import com.soundapp.mobile.utils.extensions.setVisible
 import kotlinx.android.synthetic.main.fragment_tasks.*
@@ -29,6 +31,7 @@ class TasksFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecycler()
+        setupSwipeHandler()
         bindState()
     }
 
@@ -44,6 +47,20 @@ class TasksFragment: Fragment() {
             addItemDecoration(EqualSpacingItemDecoration(resources.getDimensionPixelSize(R.dimen.card_spacing)))
         }
     }
+
+    private fun setupSwipeHandler() {
+        val swipeHandler = object : SwipeToDeleteCallback() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                (viewHolder as? TaskAdapter.TaskViewHolder)?.run {
+                    val position = adapterPosition
+                    this@TasksFragment.tasksViewModel.deleteTaskAt(position)
+                }
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(tasksRecyclerView)
+    }
+
 
     private fun bindState() {
         with(tasksViewModel) {
