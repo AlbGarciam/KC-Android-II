@@ -1,6 +1,7 @@
 package com.soundapp.mobile.todotask.presentations.task_details
 
 import androidx.lifecycle.MutableLiveData
+import com.soundapp.mobile.todotask.domain.SubTaskRepository
 import com.soundapp.mobile.todotask.domain.TaskRepository
 import com.soundapp.mobile.todotask.domain.model.Task
 import com.soundapp.mobile.todotask.presentations.BaseViewModel
@@ -10,7 +11,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class DetailTaskViewModel(
-    private val taskRepository: TaskRepository
+    private val taskRepository: TaskRepository,
+    private val subtaskRepository: SubTaskRepository
 ): BaseViewModel()  {
     val taskState = MutableLiveData<Task>()
     val isLoadingState = MutableLiveData<Boolean>()

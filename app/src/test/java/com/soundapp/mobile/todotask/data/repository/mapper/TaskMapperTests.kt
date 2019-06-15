@@ -1,6 +1,6 @@
 package com.soundapp.mobile.todotask.data.repository.mapper
 
-import com.soundapp.mobile.todotask.data.repository.local.TaskEntity
+import com.soundapp.mobile.todotask.data.repository.local.task.TaskEntity
 import org.junit.Assert
 import org.junit.Test
 import org.threeten.bp.Instant

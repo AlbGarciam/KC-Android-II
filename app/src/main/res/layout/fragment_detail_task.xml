@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent" android:layout_height="match_parent">
 
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="16dp"
+            android:layout_marginBottom="48dp"
             android:id="@+id/detailInfoContainer"
             android:focusable="true"
             android:focusableInTouchMode="true">
@@ -29,31 +30,74 @@
                 android:id="@+id/dateTextView"
                 android:textSize="14sp"
                 android:layout_marginTop="8dp"/>
-        <Switch
-                android:text="@string/highlight_task"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/highlightBox"
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal"
+                      android:layout_marginTop="8dp">
+            <Switch
+                    android:text="@string/highlight_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/highlightBox"
+                    style="@style/CustomSwitch"
+                    android:layout_marginEnd="24dp"/>
+            <Switch
+                    android:text="@string/finished_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/isFinishedBox"
+                    style="@style/CustomSwitch"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal"
+                      android:layout_marginTop="8dp">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/subtasks_title"/>
+            <View
+                    android:layout_height="1dp"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginStart="8dp"
+                    android:alpha="0.5"/>
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
                 android:layout_marginTop="8dp"
-                style="@style/CustomSwitch"/>
-        <Switch
-                android:text="@string/finished_task"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/isFinishedBox"
-                android:layout_marginTop="8dp"
-                style="@style/CustomSwitch"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+        />
     </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:layout_gravity="bottom"
+                  android:id="@+id/bottomLayout">
+        <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:fab_colorNormal="?colorPrimary"
+                app:fab_size="normal"
+                android:src="@drawable/fab_add"
+                android:layout_gravity="end|bottom"
+                android:clickable="true"/>
+        <Button
+                android:text="@string/save_button_text"
+                android:layout_width="match_parent"
+                style="@style/MainCTA"
+                android:layout_height="wrap_content"
+                android:id="@+id/saveButton"
+                android:layout_gravity="bottom|center_horizontal"/>
+    </LinearLayout>
+
     <ProgressBar
             android:id="@+id/taskLoader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"/>
-    <Button
-            android:text="@string/save_button_text"
-            android:layout_width="match_parent"
-            style="@style/MainCTA"
-            android:layout_height="wrap_content"
-            android:id="@+id/saveButton"
-            android:layout_gravity="bottom|center_horizontal"/>
 </FrameLayout>
