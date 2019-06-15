@@ -1,6 +1,6 @@
 package com.soundapp.mobile.todotask.data.repository
 
-import com.soundapp.mobile.todotask.data.repository.local.TaskDao
+import com.soundapp.mobile.todotask.data.repository.local.task.TaskDao
 import com.soundapp.mobile.todotask.data.repository.mapper.TaskEntityMapper
 import com.soundapp.mobile.todotask.data.repository.mapper.TaskMapper
 import com.soundapp.mobile.todotask.domain.TaskRepository

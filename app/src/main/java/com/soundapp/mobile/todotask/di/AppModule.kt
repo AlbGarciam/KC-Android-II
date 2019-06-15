@@ -2,10 +2,14 @@ package com.soundapp.mobile.todotask.di
 
 import androidx.room.Room
 import com.soundapp.mobile.todotask.data.repository.FakeTaskRepository
+import com.soundapp.mobile.todotask.data.repository.SubTaskRepositoryImpl
 import com.soundapp.mobile.todotask.data.repository.TaskRepositoryImpl
 import com.soundapp.mobile.todotask.data.repository.local.TaskDatabase
+import com.soundapp.mobile.todotask.data.repository.mapper.SubTaskEntityMapper
+import com.soundapp.mobile.todotask.data.repository.mapper.SubTaskMapper
 import com.soundapp.mobile.todotask.data.repository.mapper.TaskEntityMapper
 import com.soundapp.mobile.todotask.data.repository.mapper.TaskMapper
+import com.soundapp.mobile.todotask.domain.SubTaskRepository
 import com.soundapp.mobile.todotask.domain.TaskRepository
 import com.soundapp.mobile.todotask.presentations.add_task.AddTaskViewModel
 import com.soundapp.mobile.todotask.presentations.task_details.DetailTaskViewModel
@@ -28,9 +32,16 @@ val appModule = module{
         get<TaskDatabase>().getTaskDao()
     }
 
+    factory {
+        get<TaskDatabase>().getSubtaskDao()
+    }
 
-    single<TaskRepository>() {
+    single<TaskRepository> {
         TaskRepositoryImpl(get(), get(), get()) // this will call the factory
+    }
+
+    single<SubTaskRepository> {
+        SubTaskRepositoryImpl(get(), get(), get())
     }
 
     single<TaskRepository>(qualifier = named("fake")) {
@@ -45,6 +56,14 @@ val appModule = module{
         TaskEntityMapper()
     }
 
+    single {
+        SubTaskMapper()
+    }
+
+    single {
+        SubTaskEntityMapper()
+    }
+
     viewModel {
         TasksViewModel(get())
     }
@@ -54,6 +73,6 @@ val appModule = module{
     }
 
     viewModel {
-        DetailTaskViewModel(get())
+        DetailTaskViewModel(get(), get())
     }
 }
