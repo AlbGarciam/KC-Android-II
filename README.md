@@ -108,3 +108,4 @@ startKoin {
       modules(appModule) // Here we instantiate our database
 }
 ``` 
+To customize the application you have to go to Android manifest and set `android:name=".TaskApp"` tag to customize the app. Where TaskApp is the class of your custom class
