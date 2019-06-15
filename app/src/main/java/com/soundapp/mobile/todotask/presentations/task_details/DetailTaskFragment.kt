@@ -1,9 +1,7 @@
 package com.soundapp.mobile.todotask.presentations.task_details
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import com.soundapp.mobile.todotask.R
 import com.soundapp.mobile.todotask.domain.model.Task
@@ -39,6 +37,7 @@ class DetailTaskFragment: Fragment() {
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_detail_task, container, false)
     }
 
@@ -49,6 +48,22 @@ class DetailTaskFragment: Fragment() {
         taskId = arguments?.getLong(DETAIL_TASK_EXTRA_TASK_ID)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_details, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.delete -> {
+                detailTaskViewModel.taskState.value?.let {task ->
+                    detailTaskViewModel.deleteTask(task)
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun bindActions() {
         saveButton.setOnClickListener(onSaveClicked)
     }
@@ -57,6 +72,7 @@ class DetailTaskFragment: Fragment() {
         with(detailTaskViewModel) {
             observe(isLoadingState, onLoadingChanged)
             observe(taskState, onTaskUpdated)
+            observe(isDeletedState, onTaskDeleted)
         }
     }
 
@@ -86,6 +102,11 @@ class DetailTaskFragment: Fragment() {
             dateTextView.text = createdAt.timeAgo()
             highlightBox.isChecked = isHighPriority
             isFinishedBox.isChecked = isFinished
+        }
+    }
+    private val onTaskDeleted: (Boolean) -> Unit = {isDeleted ->
+        if (isDeleted) {
+            requireActivity().finish()
         }
     }
 }

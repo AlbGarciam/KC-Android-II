@@ -14,6 +14,7 @@ class DetailTaskViewModel(
 ): BaseViewModel()  {
     val taskState = MutableLiveData<Task>()
     val isLoadingState = MutableLiveData<Boolean>()
+    val isDeletedState = MutableLiveData<Boolean>()
 
     fun updateTask(task: Task) {
         if (task.content.isValidAsContent()) else { return }
@@ -30,6 +31,14 @@ class DetailTaskViewModel(
             isLoadingState.value = true
             taskState.value  = withContext(Dispatchers.IO) { taskRepository.getTaskById(id = id) }
             isLoadingState.value = false
+        }
+    }
+
+    fun deleteTask(task: Task) {
+        launch {
+            isLoadingState.value = true
+            withContext(Dispatchers.IO) { taskRepository.removeTask(task) }
+            isDeletedState.value = true
         }
     }
 }

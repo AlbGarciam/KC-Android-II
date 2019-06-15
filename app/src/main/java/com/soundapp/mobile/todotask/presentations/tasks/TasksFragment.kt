@@ -85,6 +85,8 @@ class TasksFragment: Fragment() {
     }
     private val onLoadingState: (Boolean) -> Unit = { isLoading ->
         tasksLoader.setVisible(isLoading)
+        tasksRecyclerView.setVisible(!isLoading)
+        emptyText.setVisible(!isLoading)
         if (!isLoading) {
             tasksViewModel.isEmptyState.value?.let { isEmpty ->
                 emptyText.setVisible(isEmpty)

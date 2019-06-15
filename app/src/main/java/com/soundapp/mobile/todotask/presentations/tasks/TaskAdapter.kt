@@ -46,39 +46,20 @@ class TaskAdapter(
                 finishSwitch.isChecked = task.isFinished
                 statusIndicator.setImageResource(task.indicator())
                 finishSwitch.setOnClickListener {
-                    onFinishedStatusChanged(task)
-                    val isChecked = finishSwitch.isChecked
-                    statusIndicator.setImageResource(task.indicatorForFinishStatus(isChecked))
-                    if (isChecked) {
-                        applyStrikeThrough(cardContentText, task.content, true)
-                    } else {
-                        removeStrikeThrough(cardContentText, task.content, true)
-                    }
+                    onFinishClicked(task)
                 }
 
                 setOnTouchListener { _, _ ->
-                    // This is used to remove the focus from edit text
-                    if (cardContentText.isEnabled) {
-                        cardContentText.isEnabled = false
-                        onTaskUpdatedRequested(task, cardContentText.text.toString())
-                        val isChecked = itemView.finishSwitch.isChecked
-                        if (isChecked) {
-                            applyStrikeThrough(cardContentText, cardContentText.text.toString(), true)
-                        } else {
-                            removeStrikeThrough(cardContentText, cardContentText.text.toString(), true)
-                        }
-                    }
-                    requestFocus()
-                    false
+                    onCardTouched(task)
                 }
 
-                edit.setOnClickListener {// This one is used to set focus on edit text
-                    cardContentText.isEnabled = true
-                    cardContentText.requestFocus()
+                edit.setOnClickListener {
+                    onEditClicked()
                 }
             }
             itemView.setOnClickListener { onClickListener(task) }
         }
+
         private fun applyStrikeThrough(view: TextView, content: String, animated: Boolean = false) {
             val span = SpannableString(content)
             val spanStrike = StrikethroughSpan()
@@ -114,6 +95,41 @@ class TaskAdapter(
             } else {
                 view.text = content
             }
+        }
+
+        private val onFinishClicked: (Task) -> Unit = {task ->
+            with(itemView) {
+                onFinishedStatusChanged(task)
+                val isChecked = finishSwitch.isChecked
+                statusIndicator.setImageResource(task.indicatorForFinishStatus(isChecked))
+                if (isChecked) {
+                    applyStrikeThrough(cardContentText, task.content, true)
+                } else {
+                    removeStrikeThrough(cardContentText, task.content, true)
+                }
+            }
+        }
+
+        private val onEditClicked: () -> Unit = {
+            itemView.cardContentText.isEnabled = true
+            itemView.cardContentText.requestFocus()
+        }
+
+        private val onCardTouched: (Task) -> Boolean = { task ->
+            with(itemView) {
+                if (cardContentText.isEnabled) {
+                    cardContentText.isEnabled = false
+                    onTaskUpdatedRequested(task, cardContentText.text.toString())
+                    val isChecked = itemView.finishSwitch.isChecked
+                    if (isChecked) {
+                        applyStrikeThrough(cardContentText, cardContentText.text.toString(), true)
+                    } else {
+                        removeStrikeThrough(cardContentText, cardContentText.text.toString(), true)
+                    }
+                }
+                requestFocus()
+            }
+            false
         }
     }
 
