@@ -3,15 +3,14 @@ package com.soundapp.mobile.todotask.presentations.task_details
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.soundapp.mobile.todotask.R
+import com.soundapp.mobile.todotask.domain.model.SubTask
 import com.soundapp.mobile.todotask.domain.model.Task
-import com.soundapp.mobile.utils.extensions.isValidAsContent
-import com.soundapp.mobile.utils.extensions.observe
-import com.soundapp.mobile.utils.extensions.setVisible
-import com.soundapp.mobile.utils.extensions.timeAgo
+import com.soundapp.mobile.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_detail_task.*
 import kotlinx.android.synthetic.main.fragment_detail_task.dateTextView
-import kotlinx.android.synthetic.main.item_task.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.threeten.bp.Instant
 
@@ -29,6 +28,13 @@ class DetailTaskFragment: Fragment() {
     }
 
     private val detailTaskViewModel: DetailTaskViewModel by viewModel()
+    private val adapter : SubTaskAdapter by lazy {
+        SubTaskAdapter(
+            onFinishedStatusChanged = { detailTaskViewModel.toggleFinished(it) },
+            onTaskUpdatedRequested = { subtask, content ->
+                detailTaskViewModel.updateSubTaskContent(subtask, content)
+            })
+    }
 
     private var taskId: Long? = null
         set(value) {
@@ -43,9 +49,18 @@ class DetailTaskFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpRecycler()
         bindEvents()
         bindActions()
         taskId = arguments?.getLong(DETAIL_TASK_EXTRA_TASK_ID)
+    }
+
+    private fun setUpRecycler() {
+        with(subtasksList) {
+            layoutManager = LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
+            adapter = this@DetailTaskFragment.adapter
+            addItemDecoration(EqualSpacingItemDecoration(resources.getDimensionPixelSize(R.dimen.card_spacing)))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -66,12 +81,14 @@ class DetailTaskFragment: Fragment() {
 
     private fun bindActions() {
         saveButton.setOnClickListener(onSaveClicked)
+        addButton.setOnClickListener(onAddClicked)
     }
 
     private fun bindEvents() {
         with(detailTaskViewModel) {
             observe(isLoadingState, onLoadingChanged)
             observe(taskState, onTaskUpdated)
+            observe(subtasksState, onSubTasksLoaded)
             observe(isDeletedState, onTaskDeleted)
         }
     }
@@ -91,11 +108,19 @@ class DetailTaskFragment: Fragment() {
             }
         }
     }
+
+    private val onAddClicked: (View) -> Unit = {
+        detailTaskViewModel.generateSubtask()
+    }
+
     private val onLoadingChanged: (Boolean) -> Unit = {
         taskLoader.setVisible(it)
         detailInfoContainer.setVisible(!it)
         saveButton.setVisible(!it)
+        subtasksList.setVisible(!it)
+        addButton.setVisible(!it)
     }
+
     private val onTaskUpdated: (Task) -> Unit = {
         with(it) {
             taskContent.setText(content)
@@ -104,9 +129,14 @@ class DetailTaskFragment: Fragment() {
             isFinishedBox.isChecked = isFinished
         }
     }
+
     private val onTaskDeleted: (Boolean) -> Unit = {isDeleted ->
         if (isDeleted) {
             requireActivity().finish()
         }
+    }
+
+    private val onSubTasksLoaded: (List<SubTask>) -> Unit = {
+        adapter.submitList(it)
     }
 }

@@ -8,6 +8,8 @@ interface SubTaskRepository {
 
     suspend fun addTask(task: SubTask)
 
+    suspend fun updateTask(task: SubTask)
+
     suspend fun removeTask(task: SubTask)
 
 }

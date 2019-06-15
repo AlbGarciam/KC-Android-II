@@ -23,4 +23,6 @@ class SubTaskRepositoryImpl(
     override suspend fun addTask(task: SubTask) = taskDao.insert(taskEntityMapper.map(task))
 
     override suspend fun removeTask(task: SubTask) = taskDao.delete(taskEntityMapper.map(task))
+
+    override suspend fun updateTask(task: SubTask) = taskDao.update(taskEntityMapper.map(task))
 }
