@@ -38,7 +38,7 @@
     </style>
 
     <style name="InputText" parent="Widget.AppCompat.EditText">
-        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="android:backgroundTint">@drawable/edit_text_underlane_state_color</item>
         <item name="android:textSize">16sp</item>
         <item name="android:inputType">textMultiLine</item>
         <item name="android:descendantFocusability">beforeDescendants</item>
