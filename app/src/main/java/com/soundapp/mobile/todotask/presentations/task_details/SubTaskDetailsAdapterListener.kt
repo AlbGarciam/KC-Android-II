@@ -8,5 +8,5 @@ interface SubTaskDetailsAdapterListener {
     val onSubTaskRemoved: SubTaskCallback
 }
 
-typealias SubTaskCallback = (SubTask, Int) -> Unit
-typealias SubTaskChangeCallback = (SubTask, Int, String) -> Unit
+typealias SubTaskCallback = (SubTask) -> Unit
+typealias SubTaskChangeCallback = (SubTask, String) -> Unit

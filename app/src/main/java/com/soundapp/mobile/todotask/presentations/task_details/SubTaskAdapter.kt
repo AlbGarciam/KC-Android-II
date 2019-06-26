@@ -37,15 +37,12 @@ class SubTaskAdapter(private val listenerSub: SubTaskDetailsAdapterListener): Li
                 dateTextView.visibility = View.GONE
                 finishSwitch.isChecked = task.isFinished
                 statusIndicator.setImageResource(R.drawable.ic_indicator_low_priority)
-                finishSwitch.setOnClickListener {
-                    onFinishClicked(task)
-                }
 
-                setOnTouchListener { _, _ -> onCardTouched(task) }
+                finishSwitch.setOnClickListener { onFinishClicked(task) }
 
-                edit.setOnClickListener { onEditClicked() }
+                edit.setOnClickListener { onEditClicked(task) }
 
-                delete.setOnClickListener { listenerSub.onSubTaskRemoved(task, adapterPosition) }
+                delete.setOnClickListener { listenerSub.onSubTaskRemoved(task) }
             }
         }
 
@@ -88,7 +85,7 @@ class SubTaskAdapter(private val listenerSub: SubTaskDetailsAdapterListener): Li
 
         private val onFinishClicked: (SubTask) -> Unit = {task ->
             with(itemView) {
-                listenerSub.onSubTaskFinishedChanged(task, adapterPosition)
+                listenerSub.onSubTaskFinishedChanged(task)
                 val isChecked = finishSwitch.isChecked
                 if (isChecked) {
                     applyStrikeThrough(cardContentText, task.content, true)
@@ -98,26 +95,21 @@ class SubTaskAdapter(private val listenerSub: SubTaskDetailsAdapterListener): Li
             }
         }
 
-        private val onEditClicked: () -> Unit = {
-            itemView.cardContentText.isEnabled = true
-            itemView.cardContentText.requestFocus()
-        }
-
-        private val onCardTouched: (SubTask) -> Boolean = { task ->
-            with(itemView) {
-                if (cardContentText.isEnabled) {
-                    cardContentText.isEnabled = false
-                    listenerSub.onSubTaskUpdated(task, adapterPosition, cardContentText.text.toString())
-                    val isChecked = itemView.finishSwitch.isChecked
-                    if (isChecked) {
-                        applyStrikeThrough(cardContentText, cardContentText.text.toString(), true)
-                    } else {
-                        removeStrikeThrough(cardContentText, cardContentText.text.toString(), true)
-                    }
+        private val onEditClicked: (SubTask) -> Unit = {
+            val isClicked = itemView.finishSwitch.isChecked
+            with(itemView.cardContentText) {
+                if (!isEnabled) {
+                    requestFocus()
+                } else {
+                    itemView.requestFocus()
+                    val textStr = text.toString()
+                    if (isClicked) applyStrikeThrough(this, textStr, true) else removeStrikeThrough(this, textStr, true)
+                    listenerSub.onSubTaskUpdated(it, textStr)
                 }
-                requestFocus()
+                isEnabled = !isEnabled
+                val id = if (isEnabled) R.drawable.ic_save else R.drawable.ic_edit
+                itemView.edit.setImageResource(id)
             }
-            false
         }
     }
 

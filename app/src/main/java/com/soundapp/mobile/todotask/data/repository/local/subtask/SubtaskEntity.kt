@@ -5,7 +5,7 @@ import androidx.room.ForeignKey.CASCADE
 import com.soundapp.mobile.todotask.data.repository.local.task.TaskEntity
 
 @Entity(tableName = "subtasks",
-    indices = arrayOf(Index(value = ["id", "parentId"]))
+    indices = [Index(value = ["id", "parentId"])]
 )
 data class SubtaskEntity(
     @PrimaryKey(autoGenerate = true)

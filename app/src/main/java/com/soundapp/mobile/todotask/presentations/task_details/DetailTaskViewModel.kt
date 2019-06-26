@@ -77,7 +77,7 @@ class DetailTaskViewModel(
         updateSubTask(newTask)
     }
 
-    fun deleteSubTask(task: SubTask) {
+    fun deleteSubItem(task: SubTask) {
         launch {
             withContext(Dispatchers.IO) { subTaskRepository.removeTask(task) }
             val subTasks = withContext(Dispatchers.IO) { subTaskRepository.getAllSubTaskFor(task.id) }

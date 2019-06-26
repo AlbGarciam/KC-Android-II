@@ -105,9 +105,7 @@ class DetailTaskFragment: Fragment(), SubTaskDetailsAdapterListener {
         }
     }
 
-    private val onAddClicked: (View) -> Unit = {
-        detailTaskViewModel.generateSubtask()
-    }
+    private val onAddClicked: (View) -> Unit = { detailTaskViewModel.generateSubtask() }
 
     private val onLoadingChanged: (Boolean) -> Unit = {
         taskLoader.setVisible(it)
@@ -132,19 +130,11 @@ class DetailTaskFragment: Fragment(), SubTaskDetailsAdapterListener {
         }
     }
 
-    private val onSubTasksLoaded: (List<SubTask>) -> Unit = {
-        adapter.submitList(it)
-    }
+    private val onSubTasksLoaded: (List<SubTask>) -> Unit = { adapter.submitList(it) }
 
-    override val onSubTaskFinishedChanged: SubTaskCallback = { task, _ ->
-        detailTaskViewModel.toggleFinished(task)
-    }
+    override val onSubTaskFinishedChanged: SubTaskCallback = { detailTaskViewModel.toggleFinished(it) }
 
-    override val onSubTaskUpdated: SubTaskChangeCallback = { subTask, _, content ->
-        detailTaskViewModel.updateSubTaskContent(subTask, content)
-    }
+    override val onSubTaskUpdated: SubTaskChangeCallback = { subTask, content -> detailTaskViewModel.updateSubTaskContent(subTask, content) }
 
-    override val onSubTaskRemoved: SubTaskCallback = { task, _ ->
-        detailTaskViewModel.deleteSubTask(task)
-    }
+    override val onSubTaskRemoved: SubTaskCallback = { detailTaskViewModel.deleteSubItem(it) }
 }
