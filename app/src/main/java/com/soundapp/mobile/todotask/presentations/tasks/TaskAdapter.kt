@@ -15,15 +15,10 @@ import com.soundapp.mobile.todotask.R
 import com.soundapp.mobile.todotask.domain.model.Task
 import com.soundapp.mobile.utils.extensions.indicator
 import com.soundapp.mobile.utils.extensions.indicatorForFinishStatus
-import com.soundapp.mobile.utils.extensions.setVisible
 import com.soundapp.mobile.utils.extensions.timeAgo
 import kotlinx.android.synthetic.main.item_task.view.*
 
-class TaskAdapter(
-    private val onFinishedStatusChanged: (task: Task) -> Unit,
-    private val onClickListener: (task: Task) -> Unit,
-    private val onTaskUpdatedRequested: (task: Task, text: String) -> Unit
-): ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffUtil()) {
+class TaskAdapter(private val listener: TaskAdapterListener): ListAdapter<Task, TaskAdapter.TaskViewHolder>(TaskDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.item_task, parent, false)
@@ -56,8 +51,11 @@ class TaskAdapter(
                 edit.setOnClickListener {
                     onEditClicked()
                 }
+                delete.setOnClickListener {
+                    listener.onTaskRemoved(task)
+                }
             }
-            itemView.setOnClickListener { onClickListener(task) }
+            itemView.setOnClickListener { listener.onClickListener(task) }
         }
 
         private fun applyStrikeThrough(view: TextView, content: String, animated: Boolean = false) {
@@ -99,7 +97,7 @@ class TaskAdapter(
 
         private val onFinishClicked: (Task) -> Unit = {task ->
             with(itemView) {
-                onFinishedStatusChanged(task)
+                listener.onTaskFinishedChanged(task)
                 val isChecked = finishSwitch.isChecked
                 statusIndicator.setImageResource(task.indicatorForFinishStatus(isChecked))
                 if (isChecked) {
@@ -119,7 +117,7 @@ class TaskAdapter(
             with(itemView) {
                 if (cardContentText.isEnabled) {
                     cardContentText.isEnabled = false
-                    onTaskUpdatedRequested(task, cardContentText.text.toString())
+                    listener.onTaskUpdated(task, cardContentText.text.toString())
                     val isChecked = itemView.finishSwitch.isChecked
                     if (isChecked) {
                         applyStrikeThrough(cardContentText, cardContentText.text.toString(), true)

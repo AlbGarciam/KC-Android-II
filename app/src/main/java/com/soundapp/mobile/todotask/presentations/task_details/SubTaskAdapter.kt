@@ -13,16 +13,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.soundapp.mobile.todotask.R
 import com.soundapp.mobile.todotask.domain.model.SubTask
-import com.soundapp.mobile.todotask.domain.model.Task
-import com.soundapp.mobile.utils.extensions.indicator
-import com.soundapp.mobile.utils.extensions.indicatorForFinishStatus
-import com.soundapp.mobile.utils.extensions.timeAgo
 import kotlinx.android.synthetic.main.item_task.view.*
 
-class SubTaskAdapter(
-    private val onFinishedStatusChanged: (task: SubTask) -> Unit,
-    private val onTaskUpdatedRequested: (task: SubTask, text: String) -> Unit
-): ListAdapter<SubTask, SubTaskAdapter.SubTaskViewHolder>(SubTaskDiffUtil()) {
+class SubTaskAdapter(private val listenerSub: SubTaskDetailsAdapterListener): ListAdapter<SubTask, SubTaskAdapter.SubTaskViewHolder>(SubTaskDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubTaskViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.item_task, parent, false)
@@ -48,13 +41,11 @@ class SubTaskAdapter(
                     onFinishClicked(task)
                 }
 
-                setOnTouchListener { _, _ ->
-                    onCardTouched(task)
-                }
+                setOnTouchListener { _, _ -> onCardTouched(task) }
 
-                edit.setOnClickListener {
-                    onEditClicked()
-                }
+                edit.setOnClickListener { onEditClicked() }
+
+                delete.setOnClickListener { listenerSub.onSubTaskRemoved(task, adapterPosition) }
             }
         }
 
@@ -97,7 +88,7 @@ class SubTaskAdapter(
 
         private val onFinishClicked: (SubTask) -> Unit = {task ->
             with(itemView) {
-                onFinishedStatusChanged(task)
+                listenerSub.onSubTaskFinishedChanged(task, adapterPosition)
                 val isChecked = finishSwitch.isChecked
                 if (isChecked) {
                     applyStrikeThrough(cardContentText, task.content, true)
@@ -116,7 +107,7 @@ class SubTaskAdapter(
             with(itemView) {
                 if (cardContentText.isEnabled) {
                     cardContentText.isEnabled = false
-                    onTaskUpdatedRequested(task, cardContentText.text.toString())
+                    listenerSub.onSubTaskUpdated(task, adapterPosition, cardContentText.text.toString())
                     val isChecked = itemView.finishSwitch.isChecked
                     if (isChecked) {
                         applyStrikeThrough(cardContentText, cardContentText.text.toString(), true)

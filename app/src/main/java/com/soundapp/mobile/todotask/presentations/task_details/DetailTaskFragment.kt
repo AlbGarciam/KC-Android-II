@@ -16,7 +16,7 @@ import org.threeten.bp.Instant
 
 private const val DETAIL_TASK_EXTRA_TASK_ID = "DETAIL_TASK_EXTRA_TASK_ID"
 
-class DetailTaskFragment: Fragment() {
+class DetailTaskFragment: Fragment(), SubTaskDetailsAdapterListener {
     companion object {
         fun create(taskId: Long) : DetailTaskFragment {
             val fragment = DetailTaskFragment()
@@ -29,11 +29,7 @@ class DetailTaskFragment: Fragment() {
 
     private val detailTaskViewModel: DetailTaskViewModel by viewModel()
     private val adapter : SubTaskAdapter by lazy {
-        SubTaskAdapter(
-            onFinishedStatusChanged = { detailTaskViewModel.toggleFinished(it) },
-            onTaskUpdatedRequested = { subtask, content ->
-                detailTaskViewModel.updateSubTaskContent(subtask, content)
-            })
+        SubTaskAdapter(this)
     }
 
     private var taskId: Long? = null
@@ -88,7 +84,7 @@ class DetailTaskFragment: Fragment() {
         with(detailTaskViewModel) {
             observe(isLoadingState, onLoadingChanged)
             observe(taskState, onTaskUpdated)
-            observe(subtasksState, onSubTasksLoaded)
+            observe(subTasksState, onSubTasksLoaded)
             observe(isDeletedState, onTaskDeleted)
         }
     }
@@ -104,7 +100,7 @@ class DetailTaskFragment: Fragment() {
                     isHighPriority = highlightBox.isChecked,
                     isFinished = isFinishedBox.isChecked
                 )
-                detailTaskViewModel.updateTask(newTask)
+                detailTaskViewModel.updateSubTask(newTask)
             }
         }
     }
@@ -138,5 +134,17 @@ class DetailTaskFragment: Fragment() {
 
     private val onSubTasksLoaded: (List<SubTask>) -> Unit = {
         adapter.submitList(it)
+    }
+
+    override val onSubTaskFinishedChanged: SubTaskCallback = { task, _ ->
+        detailTaskViewModel.toggleFinished(task)
+    }
+
+    override val onSubTaskUpdated: SubTaskChangeCallback = { subTask, _, content ->
+        detailTaskViewModel.updateSubTaskContent(subTask, content)
+    }
+
+    override val onSubTaskRemoved: SubTaskCallback = { task, _ ->
+        detailTaskViewModel.deleteSubTask(task)
     }
 }
