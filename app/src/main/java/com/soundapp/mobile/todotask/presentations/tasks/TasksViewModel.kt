@@ -52,15 +52,10 @@ class TasksViewModel(
         }
     }
 
-    fun deleteTaskAt(position: Int) {
-        if (position < 0 || position >= (tasksState.value?.size ?: 0)) return
-        tasksState.value?.get(position)?.let {task ->
-            launch {
-                withContext(Dispatchers.IO) {
-                    repository.removeTask(task)
-                }
-                loadTasks() // Keep synchronized view with viewmodel
-            }
+    fun deleteTask(task: Task) {
+        launch {
+            withContext(Dispatchers.IO) { repository.removeTask(task) }
+            loadTasks() // Keep synchronized view with viewmodel
         }
     }
 
